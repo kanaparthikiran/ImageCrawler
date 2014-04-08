@@ -139,7 +139,7 @@ class ScannerThread implements Runnable {
 				linksInnerCount++;
 
 				scannerQueue.put(hyperLinksMapIn);
-				getAdjascentLinks(log, doc, linksAttribsList);
+				getAdjacentLinks(log, doc, linksAttribsList);
 				
 			} else {
 				if (log.isDebugEnabled()) {
@@ -160,7 +160,7 @@ class ScannerThread implements Runnable {
 	 * @param linksAttribsList
 	 * @throws IOException
 	 */
-	private void getAdjascentLinks(Logger log, Document doc,
+	private void getAdjacentLinks(Logger log, Document doc,
 			List<String> linksAttribsList) throws IOException {
 		// Get all Adjascent hyperLinks
 		Elements links = doc.getElementsByTag("a");
