@@ -36,7 +36,7 @@ public class ImagePatternCheckSum {
 	}
 
 	/**
-	 * 
+	 *  This method gets the BlankImageCheckSumList.
 	 * @return
 	 * @throws IOException
 	 * @throws FileNotFoundException
