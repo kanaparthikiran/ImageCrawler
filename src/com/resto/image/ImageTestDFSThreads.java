@@ -25,6 +25,7 @@ import com.resto.image.util.ImageCrawlerConstants;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
 /**
+ * This is the main class to start ImageCrawler Application.
  * @author kkanaparthi
  * 
  */
@@ -74,6 +75,7 @@ public class ImageTestDFSThreads {
 
 	
 	/**
+	 * This method shutsDown All the Threads/VM.
 	 * @throws InterruptedException
 	 */
 	private static void shutDownThreads() throws InterruptedException {
@@ -94,8 +96,8 @@ public class ImageTestDFSThreads {
 }
 
 /**
- * 
- * @author kkanaparthi This class acts as a Producer
+ *  This Thread acts as a Producer for producing the list of Images from the WebPages.
+ * @author kkanaparthi
  */
 class ScannerThread implements Runnable {
 
@@ -133,6 +135,7 @@ class ScannerThread implements Runnable {
 	}
 
 	/**
+	 * This method scans each page and collects the Images from the WebPages.
 	 * @throws IOException
 	 * 
 	 */
@@ -182,6 +185,7 @@ class ScannerThread implements Runnable {
 
 
 	/**
+	 * This method gets the Adjacent Links from each Link
 	 * @param log
 	 * @param doc
 	 * @param linksAttribsList
@@ -189,7 +193,7 @@ class ScannerThread implements Runnable {
 	 */
 	private void getAdjacentLinks(Logger log, Document doc,
 			List<String> linksAttribsList) throws IOException {
-		// Get all Adjascent hyperLinks
+		// Get all Adjacent hyperLinks
 		Elements links = doc.getElementsByTag("a");
 
 		if (ImageCrawlerPropertyUtil.isValidCollection(links)) {
@@ -222,7 +226,7 @@ class ScannerThread implements Runnable {
 	
 	
 	/**
-	 * 
+	 * This method gets/derives the hyperlinks from the anchor Tags.
 	 * @param element
 	 * @param homePage
 	 * @return
@@ -295,7 +299,7 @@ class ScannerThread implements Runnable {
 	}
 
 	/**
-	 * 
+	 * This method collects the imageLinks.
 	 * @return
 	 */
 	public static Set<String> collectImageLinks(Elements images, Logger log) {
@@ -350,7 +354,7 @@ class ScannerThread implements Runnable {
 }
 
 /**
- * 
+ * This Thread acts as a Consumer for consuming the list of Images from the WebPages, and process them.
  * @author kkanaparthi
  * 
  */
@@ -450,7 +454,7 @@ class ConsumerThread implements Runnable {
 	
 	/**
 	 * This Method Validates the Images that were captured from all the
-	 * navigated Pages
+	 * navigated Pages, and sends out email in case of any image is missing/blank.
 	 */
 	public void validateImage(String hyperLinkElem, String imageStringEx,
 			List<String> blankImageCheckSumList) {

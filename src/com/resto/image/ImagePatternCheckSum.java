@@ -19,6 +19,7 @@ import com.resto.image.util.ImageCrawlerConstants;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
 /**
+ * This class calculates the CheckSum of the BlankImages for Comparison with each Image on the Domain.
  * @author kkanaparthi
  * 
  */
@@ -51,9 +52,9 @@ public class ImagePatternCheckSum {
 	}
 
 	/**
-	 * 
-	 * @param file
-	 * @return
+	 * This method gets the messageDigest for the Given List of fileNames.
+	 * @param fileNames List of fileNames.
+	 * @return returns messageDigestList
 	 */
 	public static List<String> getMessageDigest(List<String> fileNames)
 			throws FileNotFoundException, IOException {
@@ -111,9 +112,9 @@ public class ImagePatternCheckSum {
 	}
 
 	/**
-	 * 
-	 * @param file
-	 * @return
+	 * This method gets the messageDigest for the Given URL
+	 * @param file filePath
+	 * @return returns the message Digest
 	 */
 	public static String getMessageDigestForUrl(String fileUrl)
 			throws FileNotFoundException, IOException {
@@ -160,8 +161,8 @@ public class ImagePatternCheckSum {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * This method finds out if the image is missing/blank.
+	 * @return returns true is the image is blank/missing.
 	 */
 	public static boolean isImageNotFound(List<String> blankImageMD5List,
 			String currentImageUrl) throws FileNotFoundException, IOException {
@@ -183,6 +184,7 @@ public class ImagePatternCheckSum {
 	}
 
 	/**
+	 * main method for  Developer Unit Testing
 	 * @param args
 	 * @throws EncoderException
 	 */

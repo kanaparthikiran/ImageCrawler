@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
 /**
+ * This class is used to send Email to the intended Recipients.
  * @author kkanaparthi
  * 
  */
@@ -28,8 +29,11 @@ public class RHEMailClientUnAuth {
 			.getLogger(RHEMailClientUnAuth.class.getName());
 	private static Properties props = new Properties();
 
+
 	/**
-	 * 
+	 * This method sends the email, with the specified subject, and content.
+	 * @param subject emailSubjet
+	 * @param emailContent emailContent
 	 */
 	public static void sendEmailMessage(String subject, String emailContent) {
 		props.put("mail.smtp.host",
@@ -59,6 +63,7 @@ public class RHEMailClientUnAuth {
 	}
 
 	/**
+	 * main method for Unit Testing.
 	 * @param args
 	 */
 	public static void main(String[] args) {
