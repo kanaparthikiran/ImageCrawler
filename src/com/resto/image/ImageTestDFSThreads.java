@@ -86,7 +86,7 @@ public class ImageTestDFSThreads {
 				Thread.sleep(sleepTime20Mins);
 			}
 			if(termCounter>=3) {
-				log.error("TERMINAL COUNT REACHED, MAIN is GOING TO Interrupt , After 1 HOUR");
+				log.error("TERMINAL COUNT REACHED, MAIN is GOING TO Interrupt the Threads after 1 HOUR");
 				System.exit(1);
 			}
 		}
