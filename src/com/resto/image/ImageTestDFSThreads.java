@@ -36,6 +36,9 @@ public class ImageTestDFSThreads {
 			.getLogger(ImageTestDFSThreads.class.getName());
 	private static String startPage = ImageCrawlerPropertyUtil
 			.getProperty("siteToCrawl");
+	private static int termCounter = 0;
+	private static long sleepTime10Mins=600000;
+	private static long sleepTime20Mins=1200000;
 
 	/**
 	 * 
@@ -47,8 +50,9 @@ public class ImageTestDFSThreads {
 	/**
 	 * @param args
 	 * @throws IOException
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 
 		List<String> blankImageCheckSumList = ImagePatternCheckSum
@@ -61,8 +65,31 @@ public class ImageTestDFSThreads {
 
 		prodThread.setName("ImageProducerThread");
 		consThread.setName("ImageConsumerThread");
+
 		prodThread.start();
 		consThread.start();
+
+		shutDownThreads();
+	}
+
+	
+	/**
+	 * @throws InterruptedException
+	 */
+	private static void shutDownThreads() throws InterruptedException {
+		while(true) {
+			Thread.sleep(sleepTime10Mins);
+			Map<String, Set<String>> queueElem = queue.peek();
+			if(queueElem==null) {
+				termCounter++;
+				log.error("termCounter in MAIN as Queue Returned NULL : "+termCounter);
+				Thread.sleep(sleepTime20Mins);
+			}
+			if(termCounter>=3) {
+				log.error("TERMINAL COUNT REACHED, MAIN is GOING TO Interrupt , After 1 HOUR");
+				System.exit(1);
+			}
+		}
 	}
 }
 
@@ -333,7 +360,6 @@ class ConsumerThread implements Runnable {
 	private final Logger log;
 	private static Set<String> failedURLSet = new HashSet<String>();
 	private List<String> blankImageCheckSumList = null;
-
 	/**
 	 * 
 	 * @param consumerQueue
@@ -347,12 +373,13 @@ class ConsumerThread implements Runnable {
 
 	@Override
 	public void run() {
+		
 		// TODO Auto-generated method stub
 		while (true) {
 			try {
 				Map<String, Set<String>> hyperLinksMapLcl = consumerQueue
 						.take();
-
+				
 				if (ImageCrawlerPropertyUtil.isValidMap(hyperLinksMapLcl)) {
 					Set<String> hyperLinksKeySet = hyperLinksMapLcl.keySet();
 
@@ -374,7 +401,7 @@ class ConsumerThread implements Runnable {
 							}
 						}
 					}
-				}
+				} 
 			} catch (InterruptedException iex) {
 				log.error("The Exception while Processing the Images is "
 						+ iex.getMessage());
@@ -386,6 +413,41 @@ class ConsumerThread implements Runnable {
 
 	}
 
+	
+	/**
+	 * 
+	 * @param scannerQueue
+	 * @param termCounter
+	 */
+	/*private void interruptConsumer(BlockingQueue<Map<String, Set<String>>> scannerQueue,int termCounter, long currentTime) {
+		if (log.isDebugEnabled()) {
+			log.debug("currentTime  " + currentTime+" recheckTime "+recheckTime+" Local Current Time is "+System.currentTimeMillis());
+		}
+		if(recheckTime<=System.currentTimeMillis()) {
+			if (log.isDebugEnabled()) {
+				log.debug("Waiting done, now Comparing both the Times,  checking Scannner Queue Size...currentTime  " + currentTime+" recheckTime "+recheckTime);
+			}
+			if(scannerQueue.size()==0) {
+				termCounter++;
+				if (log.isDebugEnabled()) {
+					log.debug("The termCounter is " + termCounter);
+				}	
+				if(termCounter==10) {
+					if (log.isDebugEnabled()) {
+						log.debug("Going to Interrupt the Current Thread, and Hence Exiting the Consumer Thread " + termCounter);
+					}
+					try {
+						Thread.currentThread().interrupt();
+						throw new InterruptedException("Consumer Thread is Interrupted, Hence Terminating the Thread");
+					} catch(InterruptedException conInEx) {
+							log.error("Interrupted the Current Thread, and Hence Exiting the Consumer Thread " + termCounter);
+					}
+				}
+			}
+		}
+	}*/
+	
+	
 	/**
 	 * This Method Validates the Images that were captured from all the
 	 * navigated Pages
@@ -432,7 +494,7 @@ class ConsumerThread implements Runnable {
 			RHEMailClientUnAuth.sendEmailMessage(
 					ImageCrawlerConstants.EMAIL_IMAGES_MISSING_ON_PAGE,
 					hyperLinkElem + ImageCrawlerConstants.EMAIL_IMAGE_URL
-							+ imageStringEx);
+					+ imageStringEx);
 		}
 	}
 }
