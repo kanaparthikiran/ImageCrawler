@@ -424,31 +424,7 @@ class ConsumerThread implements Runnable {
 	 * @param termCounter
 	 */
 	/*private void interruptConsumer(BlockingQueue<Map<String, Set<String>>> scannerQueue,int termCounter, long currentTime) {
-		if (log.isDebugEnabled()) {
-			log.debug("currentTime  " + currentTime+" recheckTime "+recheckTime+" Local Current Time is "+System.currentTimeMillis());
-		}
-		if(recheckTime<=System.currentTimeMillis()) {
-			if (log.isDebugEnabled()) {
-				log.debug("Waiting done, now Comparing both the Times,  checking Scannner Queue Size...currentTime  " + currentTime+" recheckTime "+recheckTime);
-			}
-			if(scannerQueue.size()==0) {
-				termCounter++;
-				if (log.isDebugEnabled()) {
-					log.debug("The termCounter is " + termCounter);
-				}	
-				if(termCounter==10) {
-					if (log.isDebugEnabled()) {
-						log.debug("Going to Interrupt the Current Thread, and Hence Exiting the Consumer Thread " + termCounter);
-					}
-					try {
-						Thread.currentThread().interrupt();
-						throw new InterruptedException("Consumer Thread is Interrupted, Hence Terminating the Thread");
-					} catch(InterruptedException conInEx) {
-							log.error("Interrupted the Current Thread, and Hence Exiting the Consumer Thread " + termCounter);
-					}
-				}
-			}
-		}
+	
 	}*/
 	
 	
