@@ -37,7 +37,7 @@ package com.resto.image;
  */
 /*
 
- public class ImageTestDFSThreads11102013 {
+ public class ImageTestDFSThreadsSeleniumVersion {
 
  private static BlockingQueue<Map<String, Set<String>>> queue = new LinkedBlockingQueue<Map<String, Set<String>>>();
  private static final Logger log = Logger.getLogger(ImageTestDFSThreads11102013.class
@@ -48,7 +48,7 @@ package com.resto.image;
  * 
  */
 /*
- public ImageTestDFSThreads11102013() {
+ public ImageTestDFSThreadsSeleniumVersion() {
  // TODO Auto-generated constructor stub
  }
 
