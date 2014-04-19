@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,6 +22,7 @@ import org.jsoup.select.Elements;
 
 import com.resto.image.util.ImageCrawlerConstants;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
+
 
 /**
  * This is the main class to start ImageCrawler Application.
@@ -40,7 +40,9 @@ public class ImageTestDFSThreads {
 	private static int termCounter = 0;
 	private static long sleepTime10Mins=600000;
 	private static long sleepTime20Mins=1200000;
+	private static final long startTime = System.currentTimeMillis();
 
+	
 	/**
 	 * 
 	 */
@@ -70,29 +72,36 @@ public class ImageTestDFSThreads {
 		prodThread.start();
 		consThread.start();
 
-		shutDownThreads();
+		shutDownThreads(prodThread,consThread);
 	}
 
+		
+		/**
+		 * This method shutsDown All the Threads/VM.
+		 * @throws InterruptedException
+		 */
+		private static void shutDownThreads(Thread prodThread,Thread consumerThread) throws InterruptedException {
+			while(true) {
+				Thread.sleep(sleepTime10Mins);
+				log.error("HEART BEAT Check: in shutDownThreads-> prodThread Status ALIVE Status is "+prodThread.isAlive()
+					+" consumerThread Status ALIVE Status is "+consumerThread.isAlive());
 	
-	/**
-	 * This method shutsDown All the Threads/VM.
-	 * @throws InterruptedException
-	 */
-	private static void shutDownThreads() throws InterruptedException {
-		while(true) {
-			Thread.sleep(sleepTime10Mins);
-			Map<String, Set<String>> queueElem = queue.peek();
-			if(queueElem==null) {
-				termCounter++;
-				log.error("termCounter in MAIN as Queue Returned NULL : "+termCounter);
-				Thread.sleep(sleepTime20Mins);
-			}
-			if(termCounter>=3) {
-				log.error("TERMINAL COUNT REACHED, MAIN is GOING TO Interrupt the Threads after 1 HOUR");
-				System.exit(1);
+				if(!prodThread.isAlive()) {
+					Map<String, Set<String>> queueElem = queue.peek();
+					if(queueElem==null) { 
+						termCounter++;
+						log.error("Queue Returned NULL in MAIN termCounter  : "+termCounter+" prodThread Status ALIVE Status is "+prodThread.isAlive());
+						Thread.sleep(sleepTime20Mins);
+				}
+				if(termCounter>=3) {
+					log.error("TERMINAL COUNT REACHED, MAIN is GOING TO Interrupt the Threads ");
+					log.error("The Total Time to Crawl the Site is :  " + ImageCrawlerPropertyUtil.calculateMetrics(startTime, System.currentTimeMillis()));
+					System.exit(0);
+				}
 			}
 		}
 	}
+	
 }
 
 /**

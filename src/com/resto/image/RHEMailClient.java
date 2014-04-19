@@ -1,8 +1,8 @@
-/*package com.resto.image;
+package com.resto.image;
 
-*//**
+/**
  * 
- *//*
+ */
 
 import java.util.Properties;
 
@@ -18,19 +18,19 @@ import org.apache.log4j.Logger;
 
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
-*//**
+/**
  * @author kkanaparthi
  * 
- *//*
+ */
 public class RHEMailClient {
 
 	private static final Logger log = Logger.getLogger(RHEMailClient.class
 			.getName());
 	private static Properties props = new Properties();
 
-	*//**
+	/**
 	 * 
-	 *//*
+	 */
 	public static void sendEmailMessage(String subject, String emailContent) {
 		props.put("mail.smtp.host",
 				ImageCrawlerPropertyUtil.getProperty("emailHost"));
@@ -68,16 +68,16 @@ public class RHEMailClient {
 		}
 	}
 
-	*//**
+	/**
 	 * 
-	 *//*
+	 */
 	public RHEMailClient() {
 		// TODO Auto-generated constructor stub
 	}
 
-	*//**
+	/**
 	 * @param args
-	 *//*
+	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		sendEmailMessage("ALERT! - Images Missing Alert",
@@ -85,4 +85,3 @@ public class RHEMailClient {
 	}
 
 }
-*/

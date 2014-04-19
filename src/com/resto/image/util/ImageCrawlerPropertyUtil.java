@@ -6,9 +6,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+
 
 /**
  * 
@@ -20,6 +23,23 @@ public class ImageCrawlerPropertyUtil {
 	private static final Logger log = Logger
 			.getLogger(ImageCrawlerPropertyUtil.class.getName());
 
+	/**
+	 * This method Calculates the Total Time Taken to Execute ImageCrawler
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public static String calculateMetrics(long startTime, long endTime) {
+		String totalTimeStr = null;
+		long diff = endTime-startTime;
+		long diffHours = diff/(60 * 60 * 1000) % 24;
+		long diffMinutes = diff/(60 * 1000) % 60;
+		long diffSeconds = diff/1000 % 60;
+		totalTimeStr = " Hours "+diffHours+" Minutes "+diffMinutes+" Seconds "+diffSeconds;
+		return totalTimeStr;
+	}
+	
+	
 	/**
 	 * 
 	 * @return
