@@ -78,16 +78,6 @@ public class ImageTestDFSThreads {
 		prodThread.start();
 		consThread.start();
 		shutDownThreads(prodThread,consThread,writers);
-		
-//		for(int i=0;i<100;i++) {
-//			ConsumerThread cT = new ConsumerThread(null, null, null,null);
-//			ProductDetails c = cT.createProductDetails
-//			("http://www.restorationhardware.com/catalog/product/product.jsp?productId=prod2140104&categoryId=cat1990057&src=rel", "one"+i);
-//			List<ProductDetails> prList = new ArrayList<ProductDetails>();
-//			prList.add(c);
-//			cT.logProductDetails(prList,csvWriter);
-//		}
-//		ImageCrawlerPropertyUtil.closeResources(writers);
 	}
 
 		
