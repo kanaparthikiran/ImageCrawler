@@ -434,10 +434,9 @@ class ConsumerThread implements Runnable {
 									ProductDetails productDetails = createProductDetails(hyperLinkElem, imageElem);
 									List<ProductDetails> prdList = new ArrayList<ProductDetails>();
 									prdList.add(productDetails);
-									logProductDetails(prdList,csvWriter);
 								}
-//								validateImage(hyperLinkElem, imageElem,
-//										blankImageCheckSumList);
+								validateImage(hyperLinkElem, imageElem,
+										blankImageCheckSumList);
 							}
 						}
 					}
