@@ -3,6 +3,7 @@ package com.resto.image;
 /**
  * 
  */
+import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,12 +15,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
+import com.resto.image.beans.ProductDetails;
 import com.resto.image.util.ImageCrawlerConstants;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
@@ -61,18 +66,28 @@ public class ImageTestDFSThreads {
 		List<String> blankImageCheckSumList = ImagePatternCheckSum
 				.getBlankImageCheckSumList();
 		ScannerThread prod = new ScannerThread(queue, startPage, log);
-		ConsumerThread cons = new ConsumerThread(queue, blankImageCheckSumList,
-				log);
+		List<Closeable> writers = ImageCrawlerPropertyUtil.createCSVWriter();
+		CSVWriter csvWriter = (CSVWriter) writers.get(1);
+		ConsumerThread cons = new ConsumerThread(queue, blankImageCheckSumList,csvWriter,log);
+
 		Thread prodThread = new Thread(prod);
 		Thread consThread = new Thread(cons);
-
 		prodThread.setName("ImageProducerThread");
 		consThread.setName("ImageConsumerThread");
 
 		prodThread.start();
 		consThread.start();
-
-		shutDownThreads(prodThread,consThread);
+		shutDownThreads(prodThread,consThread,writers);
+		
+//		for(int i=0;i<100;i++) {
+//			ConsumerThread cT = new ConsumerThread(null, null, null,null);
+//			ProductDetails c = cT.createProductDetails
+//			("http://www.restorationhardware.com/catalog/product/product.jsp?productId=prod2140104&categoryId=cat1990057&src=rel", "one"+i);
+//			List<ProductDetails> prList = new ArrayList<ProductDetails>();
+//			prList.add(c);
+//			cT.logProductDetails(prList,csvWriter);
+//		}
+//		ImageCrawlerPropertyUtil.closeResources(writers);
 	}
 
 		
@@ -80,7 +95,7 @@ public class ImageTestDFSThreads {
 		 * This method shutsDown All the Threads/VM.
 		 * @throws InterruptedException
 		 */
-		private static void shutDownThreads(Thread prodThread,Thread consumerThread) throws InterruptedException {
+		private static void shutDownThreads(Thread prodThread,Thread consumerThread,List<Closeable >writers) throws InterruptedException {
 			while(true) {
 				Thread.sleep(sleepTime10Mins);
 				log.error("HEART BEAT Check: in shutDownThreads-> prodThread Status ALIVE Status is "+prodThread.isAlive()
@@ -96,6 +111,9 @@ public class ImageTestDFSThreads {
 				if(termCounter>=3) {
 					log.error("TERMINAL COUNT REACHED, MAIN is GOING TO Interrupt the Threads ");
 					log.error("The Total Time to Crawl the Site is :  " + ImageCrawlerPropertyUtil.calculateMetrics(startTime, System.currentTimeMillis()));
+					
+					ImageCrawlerPropertyUtil.closeResources(writers);
+					
 					System.exit(0);
 				}
 			}
@@ -186,9 +204,7 @@ class ScannerThread implements Runnable {
 				}
 			}
 		} catch (Exception ex) {
-			log.error("The Exception is :" + ex);
-			ex.printStackTrace();
-
+			log.error("The Exception While Parsing the Pages is :" + ex);
 		}
 	}
 
@@ -373,15 +389,17 @@ class ConsumerThread implements Runnable {
 	private final Logger log;
 	private static Set<String> failedURLSet = new HashSet<String>();
 	private List<String> blankImageCheckSumList = null;
+	private CSVWriter csvWriter;
 	/**
 	 * 
 	 * @param consumerQueue
 	 */
 	ConsumerThread(BlockingQueue<Map<String, Set<String>>> consumerQueue,
-			List<String> blankImageCheckSumList, Logger log) {
+			List<String> blankImageCheckSumList, CSVWriter csvWriter,Logger log) {
 		this.consumerQueue = consumerQueue;
 		this.log = log;
 		this.blankImageCheckSumList = blankImageCheckSumList;
+		this.csvWriter = csvWriter;
 	}
 
 	@Override
@@ -409,8 +427,17 @@ class ConsumerThread implements Runnable {
 								if (log.isDebugEnabled()) {
 									log.debug("The Image under comparison is " + imageElem);
 								}
-								validateImage(hyperLinkElem, imageElem,
-										blankImageCheckSumList);
+							if(ImageCrawlerPropertyUtil.isProductPage(hyperLinkElem)) {
+									if (log.isDebugEnabled()) {
+										log.debug("Product Page is Found, URL, and it is productPage******** " + hyperLinkElem);
+									}
+									ProductDetails productDetails = createProductDetails(hyperLinkElem, imageElem);
+									List<ProductDetails> prdList = new ArrayList<ProductDetails>();
+									prdList.add(productDetails);
+									logProductDetails(prdList,csvWriter);
+								}
+//								validateImage(hyperLinkElem, imageElem,
+//										blankImageCheckSumList);
 							}
 						}
 					}
@@ -435,6 +462,67 @@ class ConsumerThread implements Runnable {
 	/*private void interruptConsumer(BlockingQueue<Map<String, Set<String>>> scannerQueue,int termCounter, long currentTime) {
 	
 	}*/
+	
+	/**
+	 * This method gets the ProductDtails Bean from the given pageUrl
+	 * @param pageUrl
+	 * @return
+	 */
+	public ProductDetails  createProductDetails(String pageUrl,String imageUrl) {
+		String productId = ImageCrawlerPropertyUtil.getProductId(pageUrl,ImageCrawlerConstants.PRODUCT_ID_PATTERN);
+		String productName = ImageCrawlerPropertyUtil.getProductName(pageUrl);
+		ProductDetails productDetails = new ProductDetails(productId, pageUrl, productName, imageUrl);
+		return productDetails;
+	}
+	
+	
+
+	/**
+	 * This method logs the ProductDtails to XLS/CSV
+	 * @param pageUrl
+	 * @return
+	 * @throws IOException 
+	 */
+	public void logProductDetails(List<ProductDetails> productDetails,CSVWriter writer)  {
+		//    StringWriter sw = new StringWriter();
+//		    FileWriter fw = null;
+//		    CSVWriter writer = null;
+//		    try {
+//		    	fw = new FileWriter(ImageCrawlerConstants.PRODUCT_EXPORT_CSV_NAME);
+//		        writer = new CSVWriter(fw);
+//		    //Write header
+//		    String [] header = { "PRODUCT_ID" , "PRODUCT_URL", "PRODUCT_NAME","IMAGE_URL" };
+//		    writer.writeNext(header);
+		    //Write data
+		    String [] data;
+		    for (ProductDetails productDetailsItem : productDetails) {
+		      data = new String [] { 
+		    		  productDetailsItem.getProductId(), productDetailsItem.getProductUrl()
+		    		  , productDetailsItem.getProductName(),productDetailsItem.getImageUrl() };
+		      writer.writeNext(data);
+		      System.out.println("Written a Record "+ productDetails.toString());
+//		      if(log.isDebugEnabled()) {
+//		    	  log.debug("Done Logging the Product Record " +productDetailsItem.getProductName());
+//		      }
+		    }
+//		    } catch(IOException ex){
+//	//	    	log.error("The IOException while writing to CSV file :" + ex.getMessage());	
+//		    	System.err.println("The IOException while writing to CSV file :" + ex.getMessage());
+//		    	}
+//		    try {
+//		    	if(writer!=null && fw!=null) {
+//		    		writer.flush();
+//		    		fw.flush();
+////		    		writer.close();
+////		    		fw.close();
+//		    	}
+//			} catch (IOException e) {
+//				System.err.println("The IOException while writing to CSV file :" + e.getMessage());
+//		//		log.error("The IOException while writing to CSV file :" + e.getMessage());
+//			}
+	}
+
+
 	
 	
 	/**

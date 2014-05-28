@@ -1,16 +1,23 @@
 package com.resto.image.util;
 
+import java.io.Closeable;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import au.com.bytecode.opencsv.CSVWriter;
 
 
 /**
@@ -27,7 +34,7 @@ public class ImageCrawlerPropertyUtil {
 	 * This method Calculates the Total Time Taken to Execute ImageCrawler
 	 * @param startTime
 	 * @param endTime
-	 * @return
+	 * @return Returns the Metrics to run the Crawler
 	 */
 	public static String calculateMetrics(long startTime, long endTime) {
 		String totalTimeStr = null;
@@ -39,6 +46,49 @@ public class ImageCrawlerPropertyUtil {
 		return totalTimeStr;
 	}
 	
+	/**
+	 * This method finds out if the given pageUrl is a ProductPage
+	 * @return productPage
+	 */
+	public static boolean isProductPage(String pageUrl) {
+		boolean productPage = false;
+		if(pageUrl.contains(ImageCrawlerConstants.PRODUCT_PAGE_URL_SNIPPET)) {
+			productPage = true;
+		}
+		return productPage;
+	}
+	
+	
+	/**
+	 * This method gets the productName from the pageUrl of a ProductPage
+	 * @return productName
+	 */
+	public static String getProductName(String pageUrl) {
+		Document document = getDocumentForPage(pageUrl);
+		String productName = null;
+		if(ImageCrawlerPropertyUtil.isValidObject(document)) {
+			productName = document.title();
+		}
+		return productName;
+	}
+	
+	
+	/**
+	 * This method gets the productId from the pageUrl of a ProductPage
+	 * @return productId
+	 */
+	public static String getProductId(String pageUrl,String itemPattern) {
+		String productId = null;
+		Pattern pattern = Pattern.compile(itemPattern);
+		Matcher matcher = pattern.matcher(pageUrl);
+		if (matcher!=null && matcher.find()) {
+			productId = matcher.group(1);
+		}
+		return productId;
+	}
+	
+	
+
 	
 	/**
 	 * 
@@ -239,5 +289,79 @@ public class ImageCrawlerPropertyUtil {
 			throw new RuntimeException(
 					"Unable to find property file location.", e);
 		}
+	}
+	
+	/**
+	 * This method Closes the CSV Writer Stream.
+	 * @param writer
+	 */
+	public static void closeResources(List<Closeable>  writers) {
+		try {
+			if(ImageCrawlerPropertyUtil.isValidCollection(writers)) {
+				for(Closeable writer : writers) {
+					if(writer!=null) {
+						writer.close();
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.err.println("The IOException while Closing to CSVfile/ Writer  :" + e.getMessage());
+		}
+			if(log.isDebugEnabled()) {
+				log.debug("The System Streams/Resources are Closed Successfully");
+			}
+	}
+	
+	/**
+	 * THis method creates a CSV file for Logging the Product Details.
+	 */
+	public static List<Closeable> createCSVWriter() {
+			FileWriter fw = null;
+		    CSVWriter writer = null;
+	        List<Closeable> writers = new ArrayList<Closeable>();
+
+		    try {
+		    	fw = new FileWriter(ImageCrawlerConstants.PRODUCT_EXPORT_CSV_NAME);
+		        writer = new CSVWriter(fw);
+		        writers.add(fw);
+		        writers.add(writer);
+		    //Write header
+		    String [] header = { "PRODUCT_ID" , "PRODUCT_URL", "PRODUCT_NAME","IMAGE_URL" };
+		    writer.writeNext(header);
+		     } catch(IOException ex){
+		    	//	    	log.error("The IOException while writing to CSV file :" + ex.getMessage());	
+		    	System.err.println("The IOException while writing to CSV file :" + ex.getMessage());
+	    	}
+		    try {
+		    	if(fw!=null) {
+		    		fw.flush();
+		    	}
+		} 	catch(IOException ex){
+	//    	//	    	log.error("The IOException while writing to CSV file :" + ex.getMessage());	
+			System.err.println("The IOException while writing to CSV file :" + ex.getMessage());
+	//    	}
+		}
+		    return writers;
+	}
+	
+	public static void main(String a[]) {
+//		String mydata = "http://www.restorationhardware.com/catalog/product/product.jsp?productId=prod2140104&categoryId=cat1990057&src=rel";
+//		boolean isProductPage = isProductPage(mydata);
+////		mydata = "http://www.restorationhardware.com/catalog/product/product.jsp?productId=prod2481080&categoryId=cat2280008";
+//		mydata ="http://www.restorationhardware.com/catalog/product/product.jsp?productId=prod2461207&categoryId=cat2390400&src=rel";
+//		Pattern pattern = Pattern.compile(ImageCrawlerConstants.PRODUCT_ID_PATTERN);
+//		Matcher matcher = pattern.matcher(mydata);
+//		String productId = null;
+//		String productName = null;
+//		if (matcher.find())
+//		{
+//			productId =  matcher.group(1);
+//		    System.out.println("productId : " + productId);
+//		}
+//			productName  = getProductName(mydata);
+//		    System.out.println("productName : " + productName);
+//
+//		    
+//		 System.out.println("isProductPage : " + isProductPage);		
 	}
 }

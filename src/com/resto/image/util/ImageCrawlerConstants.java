@@ -17,4 +17,9 @@ public interface ImageCrawlerConstants {
 	public static final String MD5_NOT_EQUAL = "Both The MD5 are NOT EQUAL";
 	public static final String EMAIL_IMAGES_MISSING_ON_PAGE = "Images Missing in the Domain on the Page";
 	public static final String EMAIL_IMAGE_URL = " and Image URL is ";
+	
+	public static final String PRODUCT_PAGE_URL_SNIPPET="/catalog/product/product.jsp?productId=prod";
+	public static final String PRODUCT_ID_PATTERN="productId=(.*?)&";
+	public static final String PRODUCT_EXPORT_CSV_NAME="prodDetailsFor.csv";
+	
 }

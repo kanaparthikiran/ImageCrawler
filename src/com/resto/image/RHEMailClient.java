@@ -4,6 +4,9 @@ package com.resto.image;
  * 
  */
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -80,8 +83,13 @@ public class RHEMailClient {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		sendEmailMessage("ALERT! - Images Missing Alert",
-				"There are Some Images Missing in the Domain, which needes Your attention !");
+//		sendEmailMessage("ALERT! - Images Missing Alert",
+//				"There are Some Images Missing in the Domain, which needes Your attention !");
+		
+		DateFormat fmt = new SimpleDateFormat("MM-dd-yy_HH-mm-SS");
+		String curTime = fmt.format(Calendar.getInstance().getTime());
+		
+		System.out.println("Current Time in Format is "+ curTime);
 	}
 
 }
