@@ -52,7 +52,6 @@ public class ImageTestDFSThreads {
 	 * 
 	 */
 	public ImageTestDFSThreads() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -61,7 +60,6 @@ public class ImageTestDFSThreads {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
-		// TODO Auto-generated method stub
 
 		List<String> blankImageCheckSumList = ImagePatternCheckSum
 				.getBlankImageCheckSumList();
@@ -145,7 +143,6 @@ class ScannerThread implements Runnable {
 		try {
 			scanPages(startPage, log);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			log.error("The Exception in the Scanner Thread is : "
 					+ e.getMessage());
 		}
@@ -395,7 +392,6 @@ class ConsumerThread implements Runnable {
 	@Override
 	public void run() {
 		
-		// TODO Auto-generated method stub
 		while (true) {
 			try {
 				Map<String, Set<String>> hyperLinksMapLcl = consumerQueue

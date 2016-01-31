@@ -45,7 +45,6 @@ public class ImageTestDFSThreadsSeleniumVersion {
  */
 
 	public ImageTestDFSThreadsSeleniumVersion() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -54,7 +53,6 @@ public class ImageTestDFSThreadsSeleniumVersion {
 	 */
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		ScannerThreadSelenium prod = new ScannerThreadSelenium(queue, startPage, log);
 		ConsumerThreadSelenium cons = new ConsumerThreadSelenium(queue, log);
 		Thread prodThread = new Thread(prod, "SCANNER-THREAD");
@@ -105,7 +103,6 @@ class ScannerThreadSelenium implements Runnable {
 		try {
 			scanPages(startPage, log);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			log.error("The Exception in the Scanner Thread is : "
 					+ e.getMessage());
 		}
@@ -341,7 +338,6 @@ class ConsumerThreadSelenium implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		while (true) {
 			try {
 				Map<String, Set<String>> hyperLinksMapLcl = consumerQueue
