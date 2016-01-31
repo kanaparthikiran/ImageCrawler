@@ -44,6 +44,7 @@ public class ImageTestDFSThreads {
 			.getProperty("siteToCrawl");
 	private static int termCounter = 0;
 	private static final long startTime = System.currentTimeMillis();
+	private static final String CLASS_NAME="ImageTestDFSThreadsSeleniumVersion";
 
 	
 	/**
@@ -59,6 +60,7 @@ public class ImageTestDFSThreads {
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
 
+		log.info("STARTED "+CLASS_NAME);
 		List<String> blankImageCheckSumList = ImagePatternCheckSum
 				.getBlankImageCheckSumList();
 		ScannerThread prod = new ScannerThread(queue, startPage, log);
@@ -73,6 +75,9 @@ public class ImageTestDFSThreads {
 
 		prodThread.start();
 		consThread.start();
+		
+		log.info("EXITING "+CLASS_NAME);
+		
 		shutDownThreads(prodThread,consThread,writers);
 	}
 
@@ -545,12 +550,12 @@ class ConsumerThread implements Runnable {
 							+ " and Image URL is " + imageStringEx);
 		} catch (IOException ioe) {
 			failedURLSet.add(hyperLinkElem);
-			log.error("The Exception while validating the Image - IOException :"
+			log.error("The Exception while validating the Image - IOException : "
 					+ ioe.getMessage());
 		}
 		if (isImageNotFound) {
 			failedURLSet.add(hyperLinkElem);
-			log.error("The Image is Not Found......and is Blank at the Page"
+			log.error("The Image is Not Found......and is Blank at the Page "
 					+ hyperLinkElem);
 			RHEMailClient.sendEmailMessage(
 					ImageCrawlerConstants.EMAIL_IMAGES_MISSING_ON_PAGE,

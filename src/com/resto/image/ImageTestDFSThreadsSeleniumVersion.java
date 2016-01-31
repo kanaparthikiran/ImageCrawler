@@ -39,6 +39,7 @@ public class ImageTestDFSThreadsSeleniumVersion {
 			.getLogger(ImageTestDFSThreadsSeleniumVersion.class.getName());
 	private static String startPage = ImageCrawlerPropertyUtil
 			.getProperty("siteToCrawl");
+	private static final String CLASS_NAME="ImageTestDFSThreadsSeleniumVersion";
 
 /**
  * 
@@ -53,6 +54,8 @@ public class ImageTestDFSThreadsSeleniumVersion {
 	 */
 
 	public static void main(String[] args) throws IOException {
+		log.info("STARTED "+CLASS_NAME);
+
 		ScannerThreadSelenium prod = new ScannerThreadSelenium(queue, startPage, log);
 		ConsumerThreadSelenium cons = new ConsumerThreadSelenium(queue, log);
 		Thread prodThread = new Thread(prod, "SCANNER-THREAD");
@@ -62,6 +65,8 @@ public class ImageTestDFSThreadsSeleniumVersion {
 		consThread.setName("ImageConsumerThread");
 		prodThread.start();
 		consThread.start();
+
+		log.info("Exiting "+CLASS_NAME);
 	}
 }
 
@@ -430,12 +435,12 @@ class ConsumerThreadSelenium implements Runnable {
 						+ "ioe_");
 				// RHEMailClient.sendEmailMessage("IOException for the Link/Image",
 				// hyperLinkElem+" and Image URL is "+imageStringEx);
-				log.error("The Exception while validating the Image - IOException :"
+				log.error("The Exception while validating the Image - IOException : "
 						+ ioe.getMessage());
 			}
 			if (isImageNotFound) {
 				failedURLSet.add(hyperLinkElem);
-				log.error("The Image is Not Found......and is Blank at the Page"
+				log.error("The Image is Not Found......and is Blank at the Page "
 						+ hyperLinkElem);
 				RHEMailClient.sendEmailMessage(
 						"Images Missing in the Domain on the Page",
