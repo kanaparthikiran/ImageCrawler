@@ -43,8 +43,6 @@ public class ImageTestDFSThreads {
 	private static String startPage = ImageCrawlerPropertyUtil
 			.getProperty("siteToCrawl");
 	private static int termCounter = 0;
-	private static long sleepTime10Mins=600000;
-	private static long sleepTime20Mins=1200000;
 	private static final long startTime = System.currentTimeMillis();
 
 	
@@ -80,12 +78,13 @@ public class ImageTestDFSThreads {
 
 		
 		/**
-		 * This method shutsDown All the Threads/VM.
+		 * This method checks the heart beat of the Producer, and Consumer threads at the desired intervals, and
+		 * closes resources, shutsDown All the Threads/VM.
 		 * @throws InterruptedException
 		 */
 		private static void shutDownThreads(Thread prodThread,Thread consumerThread,List<Closeable >writers) throws InterruptedException {
 			while(true) {
-				Thread.sleep(sleepTime10Mins);
+				Thread.sleep(ImageCrawlerPropertyUtil.getIntProperty("sleepTime10Mins"));
 				log.error("HEART BEAT Check: in shutDownThreads-> prodThread Status ALIVE Status is "+prodThread.isAlive()
 					+" consumerThread Status ALIVE Status is "+consumerThread.isAlive());
 	
@@ -94,7 +93,7 @@ public class ImageTestDFSThreads {
 					if(queueElem==null) { 
 						termCounter++;
 						log.error("Queue Returned NULL in MAIN termCounter  : "+termCounter+" prodThread Status ALIVE Status is "+prodThread.isAlive());
-						Thread.sleep(sleepTime20Mins);
+						Thread.sleep(ImageCrawlerPropertyUtil.getIntProperty("sleepTime20Mins"));
 				}
 				if(termCounter>=3) {
 					log.error("TERMINAL COUNT REACHED, MAIN is GOING TO Interrupt the Threads ");

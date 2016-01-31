@@ -34,7 +34,6 @@ public class ImagePatternCheckSum {
 	 * 
 	 */
 	public ImagePatternCheckSum() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -87,7 +86,6 @@ public class ImagePatternCheckSum {
 			}
 
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException fne) {
 			fne.printStackTrace();
@@ -142,7 +140,6 @@ public class ImagePatternCheckSum {
 				}
 				messageDigest = sb.toString();
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (FileNotFoundException fne) {
 				fne.printStackTrace();
@@ -197,7 +194,6 @@ public class ImagePatternCheckSum {
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		List<String> blankImageMD5List = getBlankImageCheckSumList();

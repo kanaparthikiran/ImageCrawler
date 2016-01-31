@@ -76,14 +76,12 @@ public class RHEMailClient {
 	 * 
 	 */
 	public RHEMailClient() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 //		sendEmailMessage("ALERT! - Images Missing Alert",
 //				"There are Some Images Missing in the Domain, which needes Your attention !");
 		
