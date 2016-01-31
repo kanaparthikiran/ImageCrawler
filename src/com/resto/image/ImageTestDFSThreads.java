@@ -241,7 +241,7 @@ class ScannerThread implements Runnable {
 	
 	
 	/**
-	 * This method gets/derives the hyperlinks from the anchor Tags.
+	 * This method gets/derives the hyperlinks from the anchor Tags, and skips navigating to the embedded URLs(SocialNetworkg,Advertising  sites Etc.)
 	 * @param element
 	 * @param homePage
 	 * @return

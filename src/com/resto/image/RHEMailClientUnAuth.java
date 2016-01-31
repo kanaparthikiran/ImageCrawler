@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
 /**
- * This class is used to send Email to the intended Recipients.
+ * This class is used to send Email to the intended Recipients, Does not need email client authentication
  * @author kkanaparthi
  * 
  */
