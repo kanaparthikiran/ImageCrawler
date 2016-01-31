@@ -541,7 +541,7 @@ class ConsumerThread implements Runnable {
 			failedURLSet.add(hyperLinkElem);
 			log.error("The Exception while validating the Image - FileNotFound "
 					+ fne.getMessage());
-			RHEMailClientUnAuth.sendEmailMessage(
+			RHEMailClient.sendEmailMessage(
 					"FileNotFoundException for the Link/Image", hyperLinkElem
 							+ " and Image URL is " + imageStringEx);
 		} catch (IOException ioe) {
@@ -553,7 +553,7 @@ class ConsumerThread implements Runnable {
 			failedURLSet.add(hyperLinkElem);
 			log.error("The Image is Not Found......and is Blank at the Page"
 					+ hyperLinkElem);
-			RHEMailClientUnAuth.sendEmailMessage(
+			RHEMailClient.sendEmailMessage(
 					ImageCrawlerConstants.EMAIL_IMAGES_MISSING_ON_PAGE,
 					hyperLinkElem + ImageCrawlerConstants.EMAIL_IMAGE_URL
 					+ imageStringEx);

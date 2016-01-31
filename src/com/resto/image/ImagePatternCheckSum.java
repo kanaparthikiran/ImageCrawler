@@ -13,8 +13,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.codec.EncoderException;
 import org.apache.log4j.Logger;
+
 import com.resto.image.util.ImageCrawlerConstants;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
@@ -190,13 +192,19 @@ public class ImagePatternCheckSum {
 	 */
 	public static void main(String[] args) throws IOException,
 			FileNotFoundException, NoSuchAlgorithmException, EncoderException {
-		// TODO Auto-generated method stub
+		System.out.println("STARTED THE PROCESS");
 
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<String> blankImageMD5List = getBlankImageCheckSumList();
 		for (String md5Str : blankImageMD5List) {
 			log.info("md5String : " + md5Str);
 		}
-		System.exit(1);
+		//System.exit(1);
 
 		String imageUrl = ImageCrawlerPropertyUtil.getProperty("blankImageUrl");
 
@@ -218,9 +226,12 @@ public class ImagePatternCheckSum {
 		}
 		log.debug("isBlank " + isBlank);
 		if (isBlank) {
-			RHEMailClientUnAuth.sendEmailMessage(
+			RHEMailClient.sendEmailMessage(
 					"Images Missing in the Domain on the Page",
 					"Watch out for An Email for Missing Images");
 		}
+		
+		System.out.println("COMPLETED THE PROCESS");
+
 	}
 }
