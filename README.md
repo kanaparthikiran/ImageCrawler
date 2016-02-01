@@ -31,9 +31,14 @@ The ImageCrawler Application has Unit Tests, the code for which is present in re
 The UnitTest Suite is called resto/images/test/AllTests.java, which can be executed as JUnit Test.
 
 For the UnitTesting purpose, a sample WebApplication is created which contains both valid and Invalid(blank/target type We want to Find out) Images, and
-the pages are linked to each other similar to a real world E-Commerce/Web Application.
+the pages are linked to each other similar to a real world E-Commerce/Web Application. The War file is located under unittestWAR folder, called TestImageWebApp.WAR, 
+it can be deployed on any J2EE WebServer,once deployed as the WebApplication is available at a particular location, same need to be given against these unittest properties
+example:- 
+siteToCrawlUnitTest=http://localhost:8080/TestImageWebApp/jsps/one.jsp
+homePageUnitTest=http://localhost:8080
 
-Invoking AllTests.java will execute the UnitTests, will crawl the target site and generate the report, and sends emails.
+
+Invoking AllTests.java will execute the UnitTests, will crawl the target UnitTest site and generate the report, and sends emails, as per JavaMail configuration.
 
 imageCrawler.properties contains UnitTest Properties under #UNIT TEST PROPERTIES section, 
 which can be configured to suite UnitTesting
