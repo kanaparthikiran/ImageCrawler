@@ -13,13 +13,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.codec.EncoderException;
 import org.apache.log4j.Logger;
+
 import com.resto.image.util.ImageCrawlerConstants;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
 /**
- * This class calculates the CheckSum of the BlankImages for Comparison with each Image on the Domain.
+ * This class calculates the CheckSum of the BlankImages for 
+ * Comparison with each Image on the Domain.
  * @author kkanaparthi
  * 
  */
@@ -32,7 +35,6 @@ public class ImagePatternCheckSum {
 	 * 
 	 */
 	public ImagePatternCheckSum() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -78,14 +80,13 @@ public class ImagePatternCheckSum {
 				}
 				if (log.isDebugEnabled()) {
 					log.debug("Adding the List . For blank Image - Digest(in hex format):: "
-							+ sb.toString());
+							+ sb.toString()+" fileName "+fileName);
 				}
 				messageDigest = sb.toString();
 				md5SumList.add(messageDigest);
 			}
 
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException fne) {
 			fne.printStackTrace();
@@ -140,7 +141,6 @@ public class ImagePatternCheckSum {
 				}
 				messageDigest = sb.toString();
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (FileNotFoundException fne) {
 				fne.printStackTrace();
@@ -184,43 +184,52 @@ public class ImagePatternCheckSum {
 	}
 
 	/**
+	 * 
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public boolean isImageMissing(String blankImage) throws FileNotFoundException, IOException {
+		List<String> blankImageMD5List = getBlankImageCheckSumList();
+		for (String md5Str : blankImageMD5List) {
+			if(log.isInfoEnabled()) {
+				log.info("md5String : " + md5Str);
+			}
+		}
+
+		String targetImageMD5 = getMessageDigestForUrl(blankImage);
+		if(log.isInfoEnabled()) {
+			log.info("targetImageMD5 STARTED for this URL " +targetImageMD5);
+		}
+		boolean isBlank = false;
+		if (blankImageMD5List != null && !blankImageMD5List.isEmpty()
+				&& targetImageMD5 != null
+				&& (blankImageMD5List.contains(targetImageMD5))) {
+			if(log.isDebugEnabled()) {
+				log.debug(ImageCrawlerConstants.MD5_EQUAL);
+			}
+			isBlank = true;
+		} else {
+			if(log.isDebugEnabled()) {
+				log.debug(ImageCrawlerConstants.MD5_NOT_EQUAL);
+			}
+		}
+		if(log.isDebugEnabled()) {
+			log.debug("isBlank " + isBlank);
+		}
+		if (isBlank) {
+			RHEMailClient.sendEmailMessage(
+					"Images Missing in the Domain on the Page ",
+					"Watch out for An Email for Missing Images ");
+		}
+		return isBlank;
+	}
+	/**
 	 * main method for  Developer Unit Testing
 	 * @param args
 	 * @throws EncoderException
 	 */
 	public static void main(String[] args) throws IOException,
 			FileNotFoundException, NoSuchAlgorithmException, EncoderException {
-		// TODO Auto-generated method stub
-
-		List<String> blankImageMD5List = getBlankImageCheckSumList();
-		for (String md5Str : blankImageMD5List) {
-			log.info("md5String : " + md5Str);
-		}
-		System.exit(1);
-
-		String imageUrl = ImageCrawlerPropertyUtil.getProperty("blankImageUrl");
-
-		// URLCodec urlCodec = new org.apache.commons.codec.net.URLCodec();
-		// String encodedurl = urlCodec.encode(imageUrl, "UTF-8");
-
-		// String encodedurl = URLEncoder.encode(imageUrl,"UTF-8");
-		// log.info("encoded URL is "+ encodedurl);
-		String targetImageMD5 = getMessageDigestForUrl(imageUrl);
-		boolean isBlank = false;
-
-		if (blankImageMD5List != null && !blankImageMD5List.isEmpty()
-				&& targetImageMD5 != null
-				&& (blankImageMD5List.contains(targetImageMD5))) {
-			log.debug(ImageCrawlerConstants.MD5_EQUAL);
-			isBlank = true;
-		} else {
-			log.debug(ImageCrawlerConstants.MD5_NOT_EQUAL);
-		}
-		log.debug("isBlank " + isBlank);
-		if (isBlank) {
-			RHEMailClientUnAuth.sendEmailMessage(
-					"Images Missing in the Domain on the Page",
-					"Watch out for An Email for Missing Images");
-		}
 	}
 }

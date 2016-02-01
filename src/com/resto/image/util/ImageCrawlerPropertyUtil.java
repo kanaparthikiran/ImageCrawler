@@ -21,6 +21,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 
 /**
+ * This is the Utility class used by ImageCarwler which contains various helper methods.
  * 
  * @author kkanaparthi
  */

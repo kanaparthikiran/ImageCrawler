@@ -5,6 +5,7 @@ package com.resto.image.util;
 
 
 /**
+ * This class contains various constants used for ImageCrawler
  * @author kkanaparthi
  * 
  */

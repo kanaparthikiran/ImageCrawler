@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import com.resto.image.util.ImageCrawlerPropertyUtil;
 
 /**
- * This class is used to send Email to the intended Recipients.
+ * This class is used to send Email to the intended Recipients, Does not need email client authentication
  * @author kkanaparthi
  * 
  */
@@ -59,7 +59,6 @@ public class RHEMailClientUnAuth {
 	 * 
 	 */
 	public RHEMailClientUnAuth() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -67,7 +66,6 @@ public class RHEMailClientUnAuth {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		sendEmailMessage("ALERT! - Images Missing Alert",
 				"There are Some Images Missing in the Domain, which needes Your attention !");
 	}

@@ -5,7 +5,7 @@ package com.resto.image.beans;
 
 /**
  * @author kkanaparthi
- *
+ * This class constructs the bean with the image URL details.
  */
 public class ProductDetails {
 	/**
