@@ -41,4 +41,4 @@ homePageUnitTest=http://localhost:8080
 Invoking AllTests.java will execute the UnitTests, will crawl the target UnitTest site and generate the report, and sends emails, as per JavaMail configuration.
 
 imageCrawler.properties contains UnitTest Properties under #UNIT TEST PROPERTIES section, 
-which can be configured to suite UnitTesting
+which can be configured to suite UnitTesting.
